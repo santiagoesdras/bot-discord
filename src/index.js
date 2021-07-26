@@ -1,12 +1,12 @@
 const cheerio = require("cheerio");
 const request = require("request-promise");
-const { Client, Richembed } = require('discord.js');
+const { Client, MessageEmbed} = require('discord.js');
 const client = new Client();
 const config = require('../config.json');
-const { parse } = require("dotenv");
 const axios = require('axios');
-const { get } = require("request");
-let chistes = ['- Dime con quién andas y te diré quién eres.\n- No ando con nadie...\n- Eres feo.', 'Va el marido completamente borracho y le dice a su mujer al irse para cama:\n- Me ha pasado algo increíble. He ido al baño y al abrir la puerta se ha encendido la luz automáticamente, sin hacer nada.\n- ¡La madre que te parió!, ¡Te mato!, ya te has vuelto a mear en la nevera.', 'Un diputado argentino se encuenta en la calle con un amigo de la infancia y este le pregunta:\n-¿ Como estas llevando esta crisis\n-!La verdad que duermo como un bebe!\n!Dormis como un bebe! ¿Pero como haces?\n-!Me despierto cada 3 horas llorando!', '-Rapido, necesitamos sangre !\n-Yo soy 0 positivo.\n-Pues muy mal, necesitamos una mentalidad optimista', ' ¿Cual es el mejor portero del mundial?\nEvidente !el de Para-guay!', 'El otro dia unas chicas llamaron a mi puerta y me pidieron una pequeña donacion para una piscina local\nLes di una garrafa de agua.', '-Andresito, ¿que planeta va despues de Marte?\n-Miercole, Señorita.', '-¿Por que Bob Esponja no va al gimnasio?\n-Porque ya esta cuadrado', '¿Que hace una vaca en la calle\n-Vaca-minando', '¿Que hace una vaca en minecraft?\n-Vaca-minando'];
+require('dotenv').config();
+const commands = require('./command/command');
+
 const prefix = config.PREFIX;
 
 // Bot listenning messages
@@ -15,9 +15,11 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-    var minuscula = msg.content.toLowerCase();
-    if (minuscula === prefix + 'chiste') {
+    let minuscula = msg.content.toLowerCase();
+
+    if (minuscula === `${prefix}chiste`) {
         let number = parseInt((Math.random() * 10));
+
         if (number <= 8) {
             console.log(number);
             msg.reply(chistes[number]);
@@ -28,8 +30,17 @@ client.on('message', msg => {
             console.log(number);
             msg.react("👎");
         }
-    } else if (minuscula === prefix + 'help') {
-        msg.reply('En que te puedo ayudar?');
+    } else if (minuscula === `${prefix}help`) {
+        
+        const embed = new MessageEmbed();
+        const availableCommands = commands.map((command) => command.command);
+
+        embed
+            .setColor('#0099ff')
+            .setTitle('Comandos disponibles :sunglasses:')
+            .setDescription(availableCommands);
+
+        msg.reply(embed);
 
     } else if (minuscula === prefix + 'perdon') {
         msg.channel.send(`${msg.author} SI TE HE FALLADO TE PIDO PERDON DE LA UNICA FORMA QUE SE, DIJO EL CHAYANNE \nPAPI JUANCHO              :eyes:\n                                    :love_you_gesture:  :tongue: :v:`);
@@ -62,15 +73,15 @@ client.on('message', msg => {
     if (minuscula === prefix + 'que bot es mejor?') {
         msg.channel.send('El del poderosisimo admin Juancho1pistolas\nPasense por mi twitch\nhttps://www.twitch.tv/juancho1pistolas');
     }
-    else if (minuscula === prefix + '/hora') {
+    else if (minuscula === prefix + 'hora') {
         msg.reply('Esto de momento no funciona porfavor deja de spamear esto.');
     }
-    else if (minuscula === prefix + 'senosfuekeneth') {
+    else if (minuscula === `${prefix}senosfuekeneth`) {
         msg.channel.send('SENOS fue keneth     :blond_haired_woman:\n                          :muscle:  :melon: :melon: :right_facing_fist: \n                                 :leg:   :leg:');
     }
     else if (minuscula === prefix + 'perdon') {
         msg.channel.send(`${msg.author} SI TE HE FALLADO TE PIDO PERDON DE LA UNICA FORMA QUE SE, DIJO EL CHAYANNE \nPAPI JUANCHO              :eyes:\n                                    :love_you_gesture:  :tongue: :v:`);
-    } else if (minuscula === 'avatar') {
+    } else if (minuscula === `${prefix}avatar`) {
         msg.reply(msg.author.displayAvatarURL());
     }
     else if (minuscula === prefix + 'ping') {
@@ -144,4 +155,4 @@ client.on('message', msg => {
     }
 });
 
-client.login(config.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN);
