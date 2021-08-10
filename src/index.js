@@ -45,7 +45,17 @@ client.on('message', msg => {
     } else if (minuscula === prefix + 'perdon') {
         msg.channel.send(`${msg.author} SI TE HE FALLADO TE PIDO PERDON DE LA UNICA FORMA QUE SE, DIJO EL CHAYANNE \nPAPI JUANCHO              :eyes:\n                                    :love_you_gesture:  :tongue: :v:`);
     }
-    else if (minuscula === prefix + 'command') {
+
+    else if (minuscula === `${prefix}kenethcoins`) {
+        const embed = new MessageEmbed();
+        embed
+            .setColor('#0EE500')
+            .setTitle('Tu cantidad de kenethcoins son: :money_mouth:')
+            .setDescription('0$ pobre, con razon vives debajo de un puente');
+
+        msg.reply(embed);
+
+    } else if (minuscula === prefix + 'command') {
         async function init() {
             const numero = parseInt(Math.random() * 45);
             const numerorest = (numero - 1);
